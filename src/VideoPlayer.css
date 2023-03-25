@@ -1,0 +1,15 @@
+.videomask {
+    display: flex;
+}
+
+
+/*
+.videomask {
+    width: 650px;
+    height: 450px;
+    margin-left: 50px;
+    border-radius: 40px;
+    overflow: hidden;
+    position: static;
+}
+*/
