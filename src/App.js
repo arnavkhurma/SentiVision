@@ -1,9 +1,8 @@
-import React from 'react'
-import Header from './Header'
-import VideoPlayer from './VideoPlayer'
-import DataComponent from './DataComponent'
-import VideoTranscript from './VideoTranscript'
-import ButtonComponent from './ButtonComponent'
+import React from 'react';
+import VideoPlayerCard from './components/VideoPlayerCard'
+import Header from './components/Header'
+import DataComponent from './components/DataComponent'
+import VideoTranscript from './components/VideoTranscript'
 
 const App = () => {
   const dataStyles = {
@@ -15,24 +14,24 @@ const App = () => {
       margin: '0 auto'
     }
   }
+
   return (
     <>
-      <div className="App">
-        <Header logoName="Sentivision" />
-          <br />
-          <>
-            <div className = 'videoOverlay' style={dataStyles.videoOverlay}>
-              <div>
-                <VideoPlayer />
-                <VideoTranscript text = 'Video Transcript' />
-              </div>
-              <div>
-                <DataComponent />
-                <ButtonComponent />
-              </div>
+      <div className='App'>
+        <Header logoName='Sentivision' />
+        <br />
+        <>
+          <div className='videoOverlay' style={dataStyles.videoOverlay}>
+            <div>
+              <VideoPlayerCard />
+              <VideoTranscript text='Video Transcript' />
             </div>
-          </>
-          <br />
+            <div>
+              <DataComponent />
+            </div>
+          </div>
+        </>
+        <br />
       </div>
     </>
   )
