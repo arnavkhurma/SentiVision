@@ -9,6 +9,8 @@ import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 import math
 import random
+import os
+from datetime import datetime
 
 
 def full_compute(video_filename):
@@ -27,7 +29,10 @@ def full_compute(video_filename):
 
     # extracts audio
     moviepy_video = VideoFileClip(video_filename)
-    audio_filename = f"{video_filename}.wav"
+    now_string = datetime.now().strftime("%m-%d-%Y_%H:%M:%S")
+    audio_folder_name = f"[audio_files]_{video_filename}"
+    os.makedirs(audio_folder_name)
+    audio_filename = f"./{audio_folder_name}/{video_filename}.wav"
     moviepy_video.audio.write_audiofile(audio_filename)
 
     # other preparation
@@ -54,7 +59,7 @@ def full_compute(video_filename):
             i += int(deltat_in_frames)
             continue
 
-        # reads frame and estimates emotion
+        # reads current frame and estimates emotion
         video.set(cv.CAP_PROP_POS_FRAMES, i)
         _, frame = video.read()
         video_emotion_output = DeepFace.analyze(
@@ -78,7 +83,7 @@ def full_compute(video_filename):
         i_in_ms = int(i / fps * 1000)
         clip = AudioSegment.from_wav(audio_filename)[
             i_in_ms-(time_interval_for_text*1000):i_in_ms]
-        clip_filename = f"{i_in_ms}ms_({video_filename}).wav"
+        clip_filename = f"./{audio_folder_name}/{i_in_ms}ms_({video_filename}).wav"
         clip.export(out_f=clip_filename, format="wav")
 
         # # transcribes clip
@@ -113,7 +118,7 @@ def full_compute(video_filename):
             f"{text_emotion_vector[0]},{text_emotion_vector[1]},{text_emotion_vector[2]}," + \
             f"{cos_theta},{classification},{text_from_clip}"
         # final_csv_string += row_string
-        # print(row_string)
+        print(row_string)
         output_data_file.write(row_string)
 
     # cv.waitKey(0)
@@ -177,4 +182,5 @@ def mean_and_sd():
 # print(f"mean = {mean}, standard deviation = {sd}")
 # RESULTS: mu = 0.7019303442772623, sigma = 0.25721961862206455
 
-# full_compute("happy_words.MOV")
+
+full_compute("happy_words.MOV")
