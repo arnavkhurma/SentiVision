@@ -29,8 +29,8 @@ def full_compute(video_filename):
 
     # extracts audio
     moviepy_video = VideoFileClip(video_filename)
-    now_string = datetime.now().strftime("%m-%d-%Y_%H:%M:%S")
-    audio_folder_name = f"[audio_files]_{video_filename}"
+    now_string = datetime.now().strftime("%m-%d-%Y_%Hh%Mm%Ss")
+    audio_folder_name = f"[audio_files]_{video_filename}_{now_string}"
     os.makedirs(audio_folder_name)
     audio_filename = f"./{audio_folder_name}/{video_filename}.wav"
     moviepy_video.audio.write_audiofile(audio_filename)
