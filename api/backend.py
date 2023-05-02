@@ -109,7 +109,7 @@ def full_compute(video_filename):
         # does the final classification of genuineness
         cos_theta = cosine_similarity(
             video_emotion_vector, text_emotion_vector)
-        classification = "Genuine" if (cos_theta >= 0.7) else "Ingenuine"
+        classification = "Genuine" if (cos_theta >= 0.5) else "Ingenuine"
 
         i += int(deltat_in_frames)
         row_string = f"\n{current_time},{current_time - time_interval_for_text},{anger}," + \

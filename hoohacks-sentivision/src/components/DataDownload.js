@@ -1,14 +1,17 @@
-import React from 'react';
-import logo from './images/download-cloud.png';
+import React from 'react'
+import logo from './images/download-cloud.png'
 
-function DataDownload(props) {
+function DataDownload (props) {
   const onButtonClick = () => {
-    fetch('/files/LinearData.csv').then(response => {
+    const pathArray = props.outputFile.split('/')
+    const fileName = pathArray.pop()
+
+    fetch('/videos/' + fileName).then(response => {
       response.blob().then(blob => {
         const fileURL = window.URL.createObjectURL(blob)
         let downloadLink = document.createElement('a')
         downloadLink.href = fileURL
-        downloadLink.download = 'LinearData.csv'
+        downloadLink.download = fileName
         downloadLink.click()
       })
     })
@@ -38,4 +41,4 @@ function DataDownload(props) {
   )
 }
 
-export default DataDownload;
+export default DataDownload

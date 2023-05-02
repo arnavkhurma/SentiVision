@@ -1,36 +1,26 @@
 import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
-import Axios from 'axios';
+import Axios from 'axios'
 
-const FileUpload = (props) => {
+const FileUpload = props => {
+  let formData = new FormData()
 
-  let formData = new FormData();
-
-
-  const onFileChange = (e) => {
-    console.log(e.target.files[0]);
-    if (e.target && e.target.files[0])  {
+  const onFileChange = e => {
+    console.log(e.target.files[0])
+    if (e.target && e.target.files[0]) {
       formData.append('file', e.target.files[0])
     }
-
-
-
-
   }
 
   const submitFileData = () => {
-    Axios.post(
-        'https://v2.convertapi.com/upload',
-        { formData }
-    )
-    .then(res => {
-      console.log(res);
-    })
-    .catch(error => {
-      console.log(error);
-    })
+    Axios.post('https://v2.convertapi.com/upload', { formData })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
-
 
   return (
     <div>

@@ -1,24 +1,49 @@
-import React from 'react';
-import './VideoPlayer.css';
+import { React, useEffect, useRef } from 'react'
+import './VideoPlayer.css'
 
-const VideoPlayer = (props) => {
+const VideoPlayer = props => {
+  const pathArray = props.outputFile.split('/')
+  const fileName = pathArray.pop()
+
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    if (props.autoplayControl) {
+      videoRef.current.play()
+    }
+  }, [props.autoplayControl])
+
   return (
-    <div className="video-container" style={{ margin: '30px' , borderRadius: '100px' , borderBlockColor: 'black', overflow: 'static', position: 'static' }}>
+    <div
+      className='video-container'
+      style={{
+        margin: '30px',
+        borderRadius: '100px',
+        borderBlockColor: 'black',
+        overflow: 'static',
+        position: 'static'
+      }}
+    >
       <video
-        className="video"
-        width="100%"
-        height="100%"
+        className='video'
+        ref={videoRef}
+        width='100%'
+        height='100%'
         marginRight='300px'
-        controls
-        autoPlay
         muted
-        style={{marginTop: '-56px', marginRight: '300px', marginBottom: '5000px' }}
+        controls={!props.condition}
+        autoPlay={props.condition}
+        style={{
+          marginTop: '-56px',
+          marginRight: '300px',
+          marginBottom: '5000px'
+        }}
       >
-        <source src={props.videoName.split("\\")[7]} type="video/mp4" />
+        <source src={fileName} type='video/mp4' />
         Your browser does not support the video tag.
       </video>
     </div>
-  );
-};
+  )
+}
 
-export default VideoPlayer;
+export default VideoPlayer
