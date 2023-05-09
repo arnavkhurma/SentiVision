@@ -1,4 +1,4 @@
-
+Current Time,Beginning of Time Interval,Anger (video),Disgust (video),Fear (video),Happy (video),Sad (video),Surprise (video),Neutral (video),Video Emotion Vector (positive),(neutral),(negative),Text Emotion Vector (positive),(neutral),(negative),Cosine similarity,Final Sincerity Classification,Transcription Over Time Interval
 0.0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 0.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 1.0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null

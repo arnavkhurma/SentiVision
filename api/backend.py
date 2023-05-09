@@ -43,6 +43,7 @@ def full_compute(video_filename):
     output_data_file = open(output_data_filename, "w")
 
     final_csv_string = "Current Time,Beginning of Time Interval,Anger (video),Disgust (video),Fear (video),Happy (video),Sad (video),Surprise (video),Neutral (video),Video Emotion Vector (positive),(neutral),(negative),Text Emotion Vector (positive),(neutral),(negative),Cosine similarity,Final Sincerity Classification,Transcription Over Time Interval"
+    output_data_file.write(final_csv_string)
     i = 0
     while i < total_frames:
         current_time = round(i / fps, 2)
