@@ -1,6 +1,9 @@
 # Sentivision: Estimates verbal sincerity by combining Computer Vision and Natural Language Processing.
 A submission for the 2023 UVA Hackathon.
 
+## Watch it in action!
+Click [here](https://www.youtube.com/watch?v=0Fc7r9HUZGE).
+
 ## Inspiration
 After having watched an unhealthy amount of criminal interrogations on YouTube, we realized that technology is often used by law enforcement to enhance their investigations. For instance, the polygraph test uses features of multiple bodily actions to detect if a suspect is lying. However, these technologies are often inaccurate, with polygraphs in fact being known for giving wrong results. So, we were curious about how machine learning could be used in this effort.
 
