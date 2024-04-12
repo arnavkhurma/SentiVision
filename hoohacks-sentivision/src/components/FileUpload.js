@@ -1,52 +1,66 @@
-import React, { useEffect, useState } from 'react'
-import './FileUpload.css'
-import Form from 'react-bootstrap/Form'
-import axios from 'axios'
+// Importing React hooks, custom CSS, and Bootstrap Form component
+import React, { useEffect, useState } from 'react';
+import './FileUpload.css';
+import Form from 'react-bootstrap/Form';
+import axios from 'axios';
 
+// FileUpload component for uploading video files
 const FileUpload = props => {
-  const { width, height } = props
+  // Destructuring width and height from props
+  const { width, height } = props;
 
-  const inputRef = React.useRef()
+  // Reference for the file input element
+  const inputRef = React.useRef();
 
-  const [count, setCount] = useState(0)
+  // State for tracking the number of uploads
+  const [count, setCount] = useState(0);
 
-  const [source, setSource] = React.useState()
+  // State for storing the source URL of the uploaded file
+  const [source, setSource] = React.useState();
 
+  // Effect hook to increment count when condition prop is true
   useEffect(() => {
-    console.log(props.condition)
-    console.log('Conditional is correct: ' + props.condition)
+    console.log(props.condition);
+    console.log('Conditional is correct: ' + props.condition);
     if (props.condition === true) {
-      setCount(count + 1)
+      setCount(count + 1);
     }
-  }, [props.condition])
+  }, [props.condition]);
 
+  // Handler for file selection and upload
   const handleFileChange = async event => {
-    const file = event.target.files[0]
-    const url = URL.createObjectURL(file)
-    setSource(url)
+    const file = event.target.files[0];
+    const url = URL.createObjectURL(file);
+    setSource(url);
 
-    const formData = new FormData()
-    formData.append('video', file)
+    // Preparing the file for upload
+    const formData = new FormData();
+    formData.append('video', file);
 
+    // Uploading the file using axios
     try {
       const response = await axios.post('http://localhost:5000/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      })
-      console.log('File uploaded:', response.data.file_path)
-      console.log('CSV finished: ', response.data.csv_filename)
-      props.func(response.data.csv_filename)
-      props.func2(response.data.file_path)
+      });
+      console.log('File uploaded:', response.data.file_path);
+      console.log('CSV finished: ', response.data.csv_filename);
+      // Calling parent component functions with the response data
+      props.func(response.data.csv_filename);
+      props.func2(response.data.file_path);
     } catch (error) {
-      console.error('Error uploading file:', error)
+      console.error('Error uploading file:', error);
     }
-  }
+  };
 
+  // Render method returning JSX
   return (
-    <div className='VideoInput' style={{ border: 'none', padding: 'px' }}>
+    <div className='VideoInput' style={{ border: 'none', padding: '0px' }}>
+      {/* Conditional rendering for file input or video display */}
       {!source && (
         <div>
+          {/* File input group with custom styling */}
           <Form.Group
             controlId='formFile'
             style={{
@@ -55,7 +69,7 @@ const FileUpload = props => {
               borderTopRightRadius: '0px',
               borderBottomRightRadius: '0px',
               width: '600px',
-              marginTop: '-0px'
+              marginTop: '0px'
             }}
             className='mb-3'
             ref={inputRef}
@@ -65,13 +79,10 @@ const FileUpload = props => {
           >
             <Form.Control type='file' />
           </Form.Group>
-          <br />
-          <br />
-          <br />
           <h4 style={{ textAlign: 'center' }}>
             Please choose a file to continue.
           </h4>
-          <br />
+          {/* Loading spinner */}
           <div className='d-flex justify-content-center'>
             <div className='spinner-border' role='status'>
               <span className='visually-hidden'>Loading...</span>
@@ -79,15 +90,16 @@ const FileUpload = props => {
           </div>
         </div>
       )}
+      {/* Displaying the video if a source is available and condition is met */}
       {props.condition && source ? (
         <video
+          className='VideoInput_video bg-dark'
           style={{
             borderRadius: '15px',
             borderBlockColor: 'black',
-            overflow: 'static',
-            position: 'static'
+            overflow: 'hidden',
+            position: 'relative'
           }}
-          className='VideoInput_video bg-dark'
           width={width + 285}
           height={height + 20}
           controls
@@ -98,8 +110,7 @@ const FileUpload = props => {
         source && (
           <div>
             <h4>Processing Video</h4>
-            <br />
-            <br />
+            {/* Loading spinner */}
             <div className='d-flex justify-content-center'>
               <div className='spinner-border' role='status'>
                 <span className='visually-hidden'>Loading...</span>
@@ -109,7 +120,8 @@ const FileUpload = props => {
         )
       )}
     </div>
-  )
-}
+  );
+};
 
-export default FileUpload
+// Exporting the FileUpload component
+export default FileUpload;

@@ -1,65 +1,70 @@
-import React, { useState, useEffect } from 'react'
-import { Card, Table } from 'react-bootstrap'
-import DataDownload from './DataDownload'
-import './DataComponent.css'
+// Importing React hooks, Bootstrap components, and custom DataDownload component
+import React, { useState, useEffect } from 'react';
+import { Card, Table } from 'react-bootstrap';
+import DataDownload from './DataDownload';
+import './DataComponent.css';
 
-function DataComponent (props) {
+// DataComponent functional component for displaying data analysis results
+function DataComponent(props) {
+  // Inline styles for the card component
   const dataStyles = {
     cardStyles: {
-      width: '690',
-      height: '200',
-      borderRadius: '10'
+      width: '690px', // Fixed width for the card
+      height: '200px', // Fixed height for the card
+      borderRadius: '10px' // Rounded corners for the card
     }
-  }
+  };
 
-  const [dataLoaded, setDataLoaded] = useState(true)
-  const [positiveEmotionVideo, setPositiveEmotionVideo] = useState(0.2)
-  const [neutralEmotionVideo, setNeutralEmotionVideo] = useState(0.1)
-  const [negativeEmotionVideo, setNegativeEmotionVideo] = useState(0.7)
-  const [positiveEmotionText, setPositiveEmotionText] = useState(0.65)
-  const [neutralEmotionText, setNeutralEmotionText] = useState(0.32)
-  const [negativeEmotionText, setNegativeEmotionText] = useState(0.03)
-  const [cosineSimilarity, setCosineSimilarity] = useState(0)
-  const [sincerity, setSincerity] = useState('Unknown')
+  // State hooks for various emotion analysis results and data loading status
+  const [dataLoaded, setDataLoaded] = useState(true);
+  const [positiveEmotionVideo, setPositiveEmotionVideo] = useState(0.2);
+  const [neutralEmotionVideo, setNeutralEmotionVideo] = useState(0.1);
+  const [negativeEmotionVideo, setNegativeEmotionVideo] = useState(0.7);
+  const [positiveEmotionText, setPositiveEmotionText] = useState(0.65);
+  const [neutralEmotionText, setNeutralEmotionText] = useState(0.32);
+  const [negativeEmotionText, setNegativeEmotionText] = useState(0.03);
+  const [cosineSimilarity, setCosineSimilarity] = useState(0);
+  const [sincerity, setSincerity] = useState('Unknown');
 
+  // Effect hook for fetching and setting data based on the provided file
   useEffect(() => {
     if (props.condition) {
-      console.log('Output file given in data comp: ' + props.outputFile)
-      const pathArray = props.outputFile.split('/')
-      const fileName = pathArray.pop()
+      console.log('Output file given in data comp: ' + props.outputFile);
+      const pathArray = props.outputFile.split('/');
+      const fileName = pathArray.pop();
 
-      console.log('Filename Split: ' + fileName)
-      let currentRow = 0 // starting row
+      console.log('Filename Split: ' + fileName);
+      let currentRow = 0; // Starting row index
       const interval = setInterval(() => {
         fetch('/videos/' + fileName)
           .then(response => response.text())
           .then(data => {
-            const rows = data.split('\n').slice(1)
-            const row = rows[currentRow].split(',')
-            console.log(row)
-            setPositiveEmotionVideo(parseFloat(row[9]))
-            setNeutralEmotionVideo(parseFloat(row[10]))
-            setNegativeEmotionVideo(parseFloat(row[11]))
+            const rows = data.split('\n').slice(1);
+            const row = rows[currentRow].split(',');
+            console.log(row);
+            // Update state with the new data
+            setPositiveEmotionVideo(parseFloat(row[9]));
+            setNeutralEmotionVideo(parseFloat(row[10]));
+            setNegativeEmotionVideo(parseFloat(row[11]));
+            setPositiveEmotionText(parseFloat(row[12]));
+            setNeutralEmotionText(parseFloat(row[13]));
+            setNegativeEmotionText(parseFloat(row[14]));
+            setCosineSimilarity(parseFloat(row[15]));
+            setSincerity(row[16]);
+            props.videoData(row[17]);
+            console.log(row[17]);
 
-            setPositiveEmotionText(parseFloat(row[12]))
-            setNeutralEmotionText(parseFloat(row[13]))
-            setNegativeEmotionText(parseFloat(row[14]))
-
-            setCosineSimilarity(parseFloat(row[15]))
-            setSincerity(row[16])
-            props.videoData(row[17])
-            console.log(row[17])
-
-            currentRow++ // move to the next row
+            currentRow++; // Move to the next row
             if (currentRow >= rows.length) {
-              clearInterval(interval)
+              clearInterval(interval); // Clear interval if we've reached the end of the data
             }
-          })
-      }, 500)
-      return () => clearInterval(interval)
+          });
+      }, 500);
+      return () => clearInterval(interval); // Cleanup interval on component unmount
     }
-  }, [props.condition])
+  }, [props.condition]);
 
+  // Render the data analysis results in a card with a table
   return (
     <div
       style={{
@@ -79,22 +84,22 @@ function DataComponent (props) {
           borderBottomRightRadius: '53px'
         }}
       >
+        {/* Display sincerity status with dynamic background color */}
         <div
           className='card-header border-0'
           style={{
             backgroundColor: sincerity === 'Genuine' ? 'green' : 'red',
-            color: 'black',
-            fontSize: '25px ',
+            fontSize: '25px',
             fontWeight: 'bold',
             textAlign: 'center',
             color: 'white',
-            borderRadius: '10px',
-            borderColor: 'red'
+            borderRadius: '10px'
           }}
         >
           Sincerity: {sincerity}
         </div>
 
+        {/* Placeholder for card image */}
         <Card.Img variant='top' />
         <Card.Body
           style={{
@@ -104,82 +109,57 @@ function DataComponent (props) {
             color: 'white'
           }}
         >
-          <Table borderless>
-            {props.condition === false && (
-              <div className='text-center'>
-                <br />
-                <br />
-                <br />
-                <br />
-                <div class='spinner-border text-light' role='status'>
-                  <span class='visually-hidden'>Loading...</span>
-                </div>
+          {/* Conditional rendering for loading spinner or data table */}
+          {props.condition === false && (
+            <div className='text-center'>
+              {/* Loading spinner */}
+              <div className='spinner-border text-light' role='status'>
+                <span className='visually-hidden'>Loading...</span>
               </div>
-            )}
-            {props.condition === true && (
-              <>
-                <thead style={{ color: 'white' }}>
-                  <tr>
-                    <th className='text-left'>Type of Data:</th>
-                    <th className='text-center'>Positive</th>
-                    <th className='text-center'>Neutral</th>
-                    <th className='text-center'>Negative</th>
-                  </tr>
-                </thead>
-                <tbody style={{ color: 'white' }}>
-                  <tr>
-                    <td style={{ fontWeight: 'bold' }}>
-                      Emotion Vector from Video
-                    </td>
-                    <td className='text-center'>
-                      {positiveEmotionVideo.toFixed(4)}
-                    </td>
-                    <td className='text-center'>
-                      {neutralEmotionVideo.toFixed(4)}
-                    </td>
-                    <td className='text-center'>
-                      {negativeEmotionVideo.toFixed(4)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: 'bold' }}>
-                      Emotion Vector from Text
-                    </td>
-                    <td className='text-center'>
-                      {positiveEmotionText.toFixed(4)}
-                    </td>
-                    <td className='text-center'>
-                      {neutralEmotionText.toFixed(4)}
-                    </td>
-                    <td className='text-center'>
-                      {negativeEmotionText.toFixed(4)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ fontWeight: 'bold' }}>Cosine Similarity</td>
-                    <td></td>
-                    <td className='text-center'>
-                      {cosineSimilarity.toFixed(4)}
-                    </td>
-                  </tr>
-                </tbody>
-              </>
-            )}
-          </Table>
+            </div>
+          )}
+          {props.condition === true && (
+            <>
+              <thead style={{ color: 'white' }}>
+                <tr>
+                  <th className='text-left'>Type of Data:</th>
+                  <th className='text-center'>Positive</th>
+                  <th className='text-center'>Neutral</th>
+                  <th className='text-center'>Negative</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Displaying the emotion analysis results for video */}
+                <tr>
+                  <td>Video</td>
+                  <td>{positiveEmotionVideo.toFixed(2)}</td>
+                  <td>{neutralEmotionVideo.toFixed(2)}</td>
+                  <td>{negativeEmotionVideo.toFixed(2)}</td>
+                </tr>
+                {/* Displaying the emotion analysis results for text */}
+                <tr>
+                  <td>Text</td>
+                  <td>{positiveEmotionText.toFixed(2)}</td>
+                  <td>{neutralEmotionText.toFixed(2)}</td>
+                  <td>{negativeEmotionText.toFixed(2)}</td>
+                </tr>
+                {/* Displaying cosine similarity and sincerity */}
+                <tr>
+                  <td>Cosine Similarity</td>
+                  <td colSpan='3'>{cosineSimilarity.toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>Sincerity</td>
+                  <td colSpan='3'>{sincerity}</td>
+                </tr>
+              </tbody>
+            </>
+          )}
         </Card.Body>
-        <Card.Header
-          style={{
-            display: 'flex',
-            justifyContent: 'right',
-            paddingBottom: '0px',
-            marginRight: '-20px'
-          }}
-        >
-          <DataDownload outputFile={props.outputFile} />
-        </Card.Header>
       </Card>
     </div>
-  )
+  );
 }
 
-export default DataComponent
+// Export the DataComponent
+export default DataComponent;
